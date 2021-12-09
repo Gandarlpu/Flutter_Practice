@@ -32,6 +32,7 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
+  int _idx = 0;
 
   void _incrementCounter() {
     setState(() {
@@ -65,10 +66,30 @@ class _MyHomePageState extends State<MyHomePage> {
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
+      bottomNavigationBar: BottomNavigationBar(
+        items: [
+          BottomNavigationBarItem(
+              icon : Icon(Icons.home),
+              label: "홈"
+          ),
+          BottomNavigationBarItem(
+              icon : Icon(Icons.more),
+              label: "더보기탭"
+          ),
+          BottomNavigationBarItem(
+              icon : Icon(Icons.home)
+          )
+        ],
+
+        onTap: (index){
+          //상태 변경 시 알려줘야함 = setState
+          setState(() {
+            print(index);
+            _idx = index;
+          });
+        },
+
+        currentIndex: _idx,
       ),
     );
   }
