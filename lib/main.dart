@@ -22,6 +22,7 @@ class MyHomePage extends StatefulWidget {
   MyHomePage({Key? key, required this.title}) : super(key: key);
 
 
+
   final String title;
 
   @override
@@ -29,74 +30,97 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _idx = 0;
-  Color color = Colors.blue;
+
+
+  var count1 = 0;
+  var count2 = 0;
+  var vicTeam = "";
 
   @override
-  void initState() {
+  void initState(){
     super.initState();
-    color = Colors.green;
   }
-
 
   @override
   Widget build(BuildContext context) {
+
 
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
       ),
-      body: Center(
-        child: GridView.count(
-          crossAxisCount: 2,
-          childAspectRatio: 1,
-          children: <Widget>[
-            InkWell(child : Container(child : Text("이름"),
-              margin: EdgeInsets.all(16),
-              padding : EdgeInsets.all(16),
-              color: color,
-            ),
-            ),
+      body: Column(
+        children: [
+          Container(height: 50),
+          Text("tingtong" , style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold)),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              Text("fase univ"),
+              Text("campus univ"),
+            ],
+          ),
+          Container(height: 30),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              Text("score : $count1" , style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold)),
+              Text("score : $count2" , style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold)),
+            ],
+          ),
+          Container(height: 10),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              Row(
+                children: [
+                  IconButton(icon: Icon(Icons.add),
+                    onPressed: (){
+                      setState(() {
+                        count1 = count1 + 1;
+
+                        if(count1 > 10){
+                          vicTeam = "fast univ win";
+                        }
+                      });
+                    },
+                  ),
+                  IconButton(icon : Icon(Icons.remove),
+                    onPressed: (){
+                      setState(() {
+                        count1 = count1 - 1;
+                      });
+                    },
+                  )
+                ],
+              ),
+              Row(
+                children: [
+                  IconButton(icon: Icon(Icons.add),
+                    onPressed: (){
+                      setState(() {
+                        count2 = count2 + 1;
+                        if(count2 > 10){
+                          vicTeam = "campus univ win";
+                        }
+                      });
+                    },
+                  ),
+                  IconButton(icon : Icon(Icons.remove),
+                    onPressed: (){
+                      setState(() {
+                        count2 = count2 - 1;
+                      });
+                    },
+                  )
+                ],
+              ),
+            ],
+          ),
+
+          Container(height: 20),
+              Text("$vicTeam" , style: TextStyle(fontSize: 20 , fontWeight: FontWeight.bold))
           ],
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: (){
-          Navigator.of(context).push(
-            MaterialPageRoute(builder: (ctx){
-              return MyHomePage(title: "새로운 페이지에요!!");
-            })
-          );
-        },
-        tooltip: "Increment",
-        child : Icon(Icons.add),
-      ),
-
-      bottomNavigationBar: BottomNavigationBar(
-        items: [
-          BottomNavigationBarItem(
-              icon : Icon(Icons.home),
-              label: "홈"
-          ),
-          BottomNavigationBarItem(
-              icon : Icon(Icons.more),
-              label: "더보기탭"
-          ),
-          BottomNavigationBarItem(
-              icon : Icon(Icons.home)
-          )
-        ],
-
-        onTap: (index){
-          //상태 변경 시 알려줘야함 = setState
-          setState(() {
-            print(index);
-            _idx = index;
-          });
-          Navigator.of(context).pop();
-        },
-
-        currentIndex: _idx,
       ),
     );
   }
