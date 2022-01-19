@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'data/todo.dart';
+
 void main() {
   runApp(const MyApp());
 }
@@ -30,63 +32,91 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
 
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
+  // 여러개를 담는 List를 통해 idx(할일)이 1이상일 때
+  // 무엇을 담냐면 todo.dart의 여러 정보들을 담아줌
+  List<Todo> todos = [];
+
+
+
+  @override
+  void initState(){
+    super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
     return Scaffold(
-      appBar: AppBar(
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
-        title: Text(widget.title),
+      appBar: PreferredSize(child : AppBar(),
+        preferredSize: Size.fromHeight(0),
       ),
-      body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
-        child: Column(
-          // Column is also a layout widget. It takes a list of children and
-          // arranges them vertically. By default, it sizes itself to fit its
-          // children horizontally, and tries to be as tall as its parent.
-          //
-          // Invoke "debug painting" (press "p" in the console, choose the
-          // "Toggle Debug Paint" action from the Flutter Inspector in Android
-          // Studio, or the "Toggle Debug Paint" command in Visual Studio Code)
-          // to see the wireframe for each widget.
-          //
-          // Column has various properties to control how it sizes itself and
-          // how it positions its children. Here we use mainAxisAlignment to
-          // center the children vertically; the main axis here is the vertical
-          // axis because Columns are vertical (the cross axis would be
-          // horizontal).
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
-            ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headline4,
-            ),
-          ],
-        ),
+      body: ListView.builder(
+          itemBuilder: (ctx , idx){
+            if(idx == 0){
+              return Container(
+                child : const Text("오늘 하루" , style : TextStyle(fontSize: 20 , fontWeight: FontWeight.bold),),
+                margin : const EdgeInsets.symmetric(vertical: 12 , horizontal: 20),
+              );
+            }else if(idx == 1){
+              return Container(
+                child : Column(
+                  children: List.generate(todos.length, (_idx){
+                      // todos의 갯수 인덱스만큼 출력
+                      Todo t = todos[_idx];
+
+                      return Container(
+                        decoration: BoxDecoration(
+                          color : Color(t.color),
+                          borderRadius: BorderRadius.circular(16)
+                        ),
+                        padding : const EdgeInsets.symmetric(vertical: 12, horizontal: 12),
+                        margin : const EdgeInsets.symmetric(vertical: 8, horizontal: 20),
+                        child : Column(
+                          // 각 줄은 중앙 정렬로 기본 셋팅되어잇음
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          //Column의 경우 행이 들어가는데 행에 대한 얼라이먼트가 아닌 행의 열이 시작으로 되던지 가운데인지를
+                          // 크로스 얼라이언트를 통해 설정
+
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(t.title , style: const TextStyle(fontSize: 18, color : Colors.white , fontWeight: FontWeight.bold),),
+                                Text(t.done == 0 ? "미완료" : "완료" , style: const TextStyle(color : Colors.white),)
+                              ],
+                            ),
+                            Container(height: 8), // 여백
+                            Text(t.memo , style: const TextStyle(color : Colors.white),)
+                          ],
+                        )
+                      );
+                    }
+                  )
+                )
+              );
+            }
+
+            return Container();
+          },
+        itemCount: 4,
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
+      bottomNavigationBar: BottomNavigationBar(
+        items: const [
+          BottomNavigationBarItem(
+              icon: Icon(Icons.today_outlined),
+              label: "오늘"
+          ),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.assignment_outlined),
+              label: "기록"
+          ),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.more_horiz),
+              label: "더보기"
+          ),
+        ],
+      ),
+
     );
   }
 }
