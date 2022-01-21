@@ -26,6 +26,14 @@ class _TodoWritePageState extends State<TodoWritePage> {
   int colorIndex = 0;
   int ctIndex = 0;
 
+  @override
+  void initState() {
+    // 페이지가 실행될 때 처음 시작되는 함수
+    super.initState();
+
+    nameController.text = widget.todo.title;
+    memoController.text = widget.todo.memo;
+  }
 
   @override
   Widget build(BuildContext context) {
