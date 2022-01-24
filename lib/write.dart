@@ -1,7 +1,7 @@
 //todolist를 작성하는 페이지
+import 'package:fastcampus_diary/data/database.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
 import 'data/todo.dart';
 
 class TodoWritePage extends StatefulWidget{
@@ -22,6 +22,7 @@ class _TodoWritePageState extends State<TodoWritePage> {
 
   TextEditingController nameController = TextEditingController();
   TextEditingController memoController = TextEditingController();
+  final dbHelper = DatabaseHelper.instance;
   //텍스트 필드를 감지하는 컨트롤러
   int colorIndex = 0;
   int ctIndex = 0;
@@ -43,11 +44,14 @@ class _TodoWritePageState extends State<TodoWritePage> {
           // 위젯을 리스트로 가지고 있는 친구
           TextButton(
             child: const Text("저장" , style: TextStyle(color : Colors.white),),
-            onPressed: (){
+            onPressed: () async {
               // 페이지 저장 시 사용
               // 텍스트필드 컨트롤러의 .text저장
               widget.todo.title = nameController.text;
               widget.todo.memo = memoController.text;
+
+              await dbHelper.insertTodo(widget.todo);
+              // 데이터베이스에 기록하는데 시간이 좀 걸리기 때문에 async걸어줌.
 
               // 이 페이지가 꺼지면서 실행됫던 widget.todo를 넘김.
               Navigator.of(context).pop(widget.todo);
